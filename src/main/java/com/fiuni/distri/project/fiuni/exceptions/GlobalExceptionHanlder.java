@@ -1,5 +1,6 @@
 package com.fiuni.distri.project.fiuni.exceptions;
 
+import com.fiuni.distri.project.fiuni.dto.ResponseDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

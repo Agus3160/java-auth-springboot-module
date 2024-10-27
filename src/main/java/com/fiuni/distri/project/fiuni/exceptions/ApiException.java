@@ -1,8 +1,10 @@
 package com.fiuni.distri.project.fiuni.exceptions;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+@Getter
 public class ApiException extends ResponseStatusException {
     private final HttpStatus status;
 
@@ -11,7 +13,4 @@ public class ApiException extends ResponseStatusException {
         this.status = status;
     }
 
-    public HttpStatus getStatus() {
-        return this.status;
-    }
 }

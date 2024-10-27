@@ -1,7 +1,7 @@
 package com.fiuni.distri.project.fiuni.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiuni.distri.project.fiuni.exceptions.ResponseDto;
+import com.fiuni.distri.project.fiuni.dto.ResponseDto;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

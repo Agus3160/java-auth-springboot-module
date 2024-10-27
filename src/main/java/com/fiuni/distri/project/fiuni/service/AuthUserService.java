@@ -3,7 +3,6 @@ package com.fiuni.distri.project.fiuni.service;
 import com.fiuni.distri.project.fiuni.jwt.JwtUtils;
 import com.fiuni.distri.project.fiuni.dao.RoleDao;
 import com.fiuni.distri.project.fiuni.dao.UserDao;
-import com.fiuni.distri.project.fiuni.domain.Role;
 import com.fiuni.distri.project.fiuni.domain.User;
 import com.fiuni.distri.project.fiuni.dto.UserDto;
 import com.fiuni.distri.project.fiuni.exceptions.ApiException;
@@ -21,9 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,22 +62,9 @@ public class AuthUserService implements UserDetailsService {
     }
 
     public void registerNewUser(UserDto userDto) {
-
-        //Map the dto to domain and set the role to the user
+        //Map the dto to domain and encode the password
         User newUser = modelMapper.map(userDto, User.class);
-
-        //Add all the roles that the user has
-        Set<Role> roleSet = new HashSet<>();
-        userDto.getRol_id().forEach(rolId -> {
-            Optional<Role> role = this.roleDao.findById(rolId);
-            if (role.isEmpty()) throw new ApiException(HttpStatus.NOT_FOUND, "Role not found");
-            roleSet.add(role.get());
-        });
-        newUser.setRoles(roleSet);
-
-        //Hash the password and set it to the user
-        newUser.setPassword(this.passwordEncoder.encode(userDto.getPassword()));
-
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         //Save the user into the db
         this.userDao.save(newUser);
     }

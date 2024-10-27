@@ -22,7 +22,7 @@ public class JwtUtils {
     @Value("${app.jwt-secret:secret}")
     private String jwtSecret;
 
-    @Value("${app-jwt-expiration-milliseconds:600000}")
+    @Value("${app-jwt-expiration-milliseconds:360000}")
     private long jwtExpirationDate;
 
     private Key key(){

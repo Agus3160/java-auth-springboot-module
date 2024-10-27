@@ -1,7 +1,7 @@
 package com.fiuni.distri.project.fiuni.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiuni.distri.project.fiuni.exceptions.ResponseDto;
+import com.fiuni.distri.project.fiuni.dto.ResponseDto;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;

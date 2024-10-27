@@ -3,12 +3,10 @@ package com.fiuni.distri.project.fiuni.controllers;
 import com.fiuni.distri.project.fiuni.auth.dto.AuthCredentialsDto;
 import com.fiuni.distri.project.fiuni.auth.dto.AuthResponseDto;
 import com.fiuni.distri.project.fiuni.auth.AuthService;
+import com.fiuni.distri.project.fiuni.dto.ResponseDto;
 import com.fiuni.distri.project.fiuni.dto.UserDto;
-import com.fiuni.distri.project.fiuni.exceptions.ResponseDto;
 import com.fiuni.distri.project.fiuni.service.AuthUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
