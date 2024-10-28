@@ -57,7 +57,7 @@ public class AuthUserService implements UserDetailsService {
         String userId = jwtUtils.getSubject(token);  // Se obtiene el subject del token, el id del usuario
 
         User user = userDao.findById(Integer.parseInt(userId)).orElseThrow(()->new ApiException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
-
+        System.out.println(user);
         return modelMapper.map(user, UserDto.class);
     }
 

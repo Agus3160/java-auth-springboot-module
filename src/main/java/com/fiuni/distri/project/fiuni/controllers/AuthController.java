@@ -1,8 +1,10 @@
 package com.fiuni.distri.project.fiuni.controllers;
 
 import com.fiuni.distri.project.fiuni.auth.dto.AuthCredentialsDto;
+import com.fiuni.distri.project.fiuni.auth.dto.AuthMeResponseDto;
 import com.fiuni.distri.project.fiuni.auth.dto.AuthResponseDto;
 import com.fiuni.distri.project.fiuni.auth.AuthService;
+import com.fiuni.distri.project.fiuni.domain.Role;
 import com.fiuni.distri.project.fiuni.dto.ResponseDto;
 import com.fiuni.distri.project.fiuni.dto.UserDto;
 import com.fiuni.distri.project.fiuni.service.AuthUserService;
@@ -37,9 +39,13 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseDto<UserDto> getUserInfoByMainObject(){
+    public ResponseDto<AuthMeResponseDto> getUserInfoByMainObject(){
         UserDto user = authUserService.getUserInfoByAuth();
-        return new ResponseDto<>(200, "User data fetched successfully", user);
+        return new ResponseDto<>(
+                200,
+                "User data fetched successfully",
+                new AuthMeResponseDto(user.getUsername(), user.getEmail(), user.getRoles())
+        );
     }
 
 }

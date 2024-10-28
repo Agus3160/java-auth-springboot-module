@@ -3,6 +3,7 @@ package com.fiuni.distri.project.fiuni.auth;
 import com.fiuni.distri.project.fiuni.auth.dto.AuthCredentialsDto;
 import com.fiuni.distri.project.fiuni.auth.dto.AuthResponseDto;
 import com.fiuni.distri.project.fiuni.dao.UserDao;
+import com.fiuni.distri.project.fiuni.domain.Role;
 import com.fiuni.distri.project.fiuni.domain.User;
 import com.fiuni.distri.project.fiuni.exceptions.ApiException;
 import com.fiuni.distri.project.fiuni.jwt.JwtUtils;
@@ -31,8 +32,6 @@ public class AuthService {
     //PERMITE OBTENER UN TOKEN POR MEDIO DE LAS CREDENCIALES
     public AuthResponseDto login(AuthCredentialsDto loginDto) {
 
-        System.out.println(loginDto);
-
         //Se utiliza el authentication Manager creado en la configuracion del SpringSecurity
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.getEmail(),
@@ -43,12 +42,12 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         //Se busca el usuario
-        User user = userDao.findByEmail(loginDto.getEmail()).orElseThrow(()->new ApiException(HttpStatus.NOT_FOUND, "User not found"));
+        User user = userDao.findByEmail(loginDto.getEmail()).orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Bad Credentials"));
 
         //Se devuelve el token al usuario y se le pasa el userId a la funcion para que lo almacene como subject del token
-        String token =  jwtUtils.generateToken(authentication, user.getId());
+        String token = jwtUtils.generateToken(authentication, user.getId());
 
-        return new AuthResponseDto(user.getEmail(), token);
+        return new AuthResponseDto(user.getUsername(), user.getEmail(), user.getRoles().stream().map(Role::getRol).toArray(String[]::new), token);
     }
 
 }

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
@@ -33,16 +34,27 @@ public class JwtUtils {
 
         String email = authentication.getName();
 
+        // Obtener los roles del usuario
+        String roles = getRolesByAuthentication(authentication);
+
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + jwtExpirationDate);
 
         return Jwts.builder()
                 .subject(""+userId)
                 .claim("email", email)
+                .claim("roles", roles)
                 .issuedAt(new Date())
                 .expiration(expireDate)
                 .signWith(key())
                 .compact();
+    }
+
+    public String getRolesByAuthentication(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .reduce((first, second) -> first + "," + second) // Concatenar roles
+                .orElse("");
     }
 
     public String getEmail(String token) {

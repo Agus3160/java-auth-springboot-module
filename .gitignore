@@ -16,7 +16,7 @@ target
 logs
 application.properties
 test
-
+out
 
 ### IntelliJ IDEA ###
 .idea
