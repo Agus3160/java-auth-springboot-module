@@ -5,6 +5,7 @@ import com.fiuni.distri.project.fiuni.jwt.JwtAuthEntryPoint;
 import com.fiuni.distri.project.fiuni.jwt.JwtAuthFilter;
 import com.fiuni.distri.project.fiuni.service.AuthUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,10 +22,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Configuration
@@ -49,6 +49,9 @@ public class AuthConfig {
     @Autowired
     CustomAccessDeniedHandler accessDeniedHandler;
 
+    @Value("${app.cors.allowedOrigins:*}")
+    String allowedOrigins;
+
     //CONFIG OF THE PROCESS OF HOW A USER HAS TO AUTHENTICATE ITSELF (USING USER SERVICE AND USING AN PASSWORD ENCODER)
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
@@ -60,7 +63,7 @@ public class AuthConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // Origen permitido
+        config.setAllowedOriginPatterns(allowedOrigins.equals("*") ? Collections.singletonList("*") : List.of(allowedOrigins.split(","))); // Origen permitido
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         config.setAllowCredentials(true);
@@ -72,24 +75,24 @@ public class AuthConfig {
 
     //CONFIG OF THE AUTH
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
 
                 //Turn off the csrf
                 .csrf(AbstractHttpConfigurer::disable)
 
-                .cors(cors-> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 //Designate the protected and public routes
                 .authorizeHttpRequests(authReq ->
                         authReq
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                .requestMatchers("auth/login","auth/signup", "/error").permitAll()
-                            .anyRequest().authenticated()
+                                .requestMatchers("auth/login", "auth/signup", "/error").permitAll()
+                                .anyRequest().authenticated()
                 )
 
-                .exceptionHandling(ex->
-                    ex.authenticationEntryPoint(jwtAuthEntryPoint).accessDeniedHandler(accessDeniedHandler)
+                .exceptionHandling(ex ->
+                        ex.authenticationEntryPoint(jwtAuthEntryPoint).accessDeniedHandler(accessDeniedHandler)
                 )
 
 

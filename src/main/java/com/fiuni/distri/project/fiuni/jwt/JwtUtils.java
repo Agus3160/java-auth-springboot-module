@@ -53,13 +53,15 @@ public class JwtUtils {
     public String getRolesByAuthentication(Authentication authentication) {
         return authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .reduce((first, second) -> first + "," + second) // Concatenar roles
+                .filter(role -> !role.isEmpty())
+                .reduce((first, second) -> first + "," + second)
                 .orElse("");
     }
 
     public String getEmail(String token) {
         return (String) getClaims(token).get("email");
     }
+
 
     public String getSubject(String token) {
         return getClaims(token).getSubject();

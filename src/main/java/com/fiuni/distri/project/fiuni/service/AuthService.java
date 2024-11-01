@@ -1,4 +1,4 @@
-package com.fiuni.distri.project.fiuni.auth;
+package com.fiuni.distri.project.fiuni.service;
 
 import com.fiuni.distri.project.fiuni.auth.dto.AuthCredentialsDto;
 import com.fiuni.distri.project.fiuni.auth.dto.AuthResponseDto;
