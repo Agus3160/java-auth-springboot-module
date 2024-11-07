@@ -27,14 +27,14 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseDto<AuthResponseDto> login(@RequestBody AuthCredentialsDto authCredentialsDto){
         AuthResponseDto authRes = authService.login(authCredentialsDto);
-        return new ResponseDto<>(200, "Login successfull", authRes);
+        return new ResponseDto<>(200, true, "Login successfull", authRes, null);
     }
 
     @PostMapping("/signup")
     public ResponseDto signup(@RequestBody UserDto userDto){
         System.out.println(userDto);
         authUserService.registerNewUser(userDto);
-        return new ResponseDto<>(200, "SignUp successfully", null);
+        return new ResponseDto<>(200, true, "SignUp successfully",null, null);
     }
 
     @GetMapping("/me")
@@ -42,8 +42,10 @@ public class AuthController {
         UserDto user = authUserService.getUserInfoByAuth();
         return new ResponseDto<>(
                 200,
+                true,
                 "User data fetched successfully",
-                new AuthMeResponseDto(user.getUsername(), user.getEmail(), user.getRoles())
+                new AuthMeResponseDto(user.getUsername(), user.getEmail(), user.getRoles()),
+                null
         );
     }
 

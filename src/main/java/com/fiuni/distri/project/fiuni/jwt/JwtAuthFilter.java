@@ -58,14 +58,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             response.setContentType("application/json");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-            ResponseDto errorResponse = new ResponseDto<>(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage(), null);
+            ResponseDto errorResponse = new ResponseDto<>(HttpServletResponse.SC_UNAUTHORIZED, false, e.getMessage(), null, null);
             response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse));
             return;
         }catch (ApiException e){
             response.setContentType("application/json");
             response.setStatus(e.getStatus().value());
 
-            ResponseDto errorResponse = new ResponseDto<>(e.getStatus().value(), e.getMessage(), null);
+            ResponseDto errorResponse = new ResponseDto<>(e.getStatus().value(), false, e.getMessage(), null, null);
             response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse));
             return;
         }

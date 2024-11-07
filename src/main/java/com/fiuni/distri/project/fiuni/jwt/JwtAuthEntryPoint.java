@@ -20,7 +20,7 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
                          AuthenticationException authException) throws IOException, JwtException, ServletException {
 
         String message = authException.getMessage();
-        ResponseDto errorResponse = new ResponseDto<>(HttpServletResponse.SC_UNAUTHORIZED, message, null);
+        ResponseDto errorResponse = new ResponseDto<>(HttpServletResponse.SC_UNAUTHORIZED, false, message, null, null);
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse));
